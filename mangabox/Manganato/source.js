@@ -1258,7 +1258,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Manganato = exports.ManganatoInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaBox_1 = require("../MangaBox");
-const MANGANATO_DOMAIN = 'https://manganelo.tv';
+const MANGANATO_DOMAIN = 'https://ww3.manganelo.tv';
 exports.ManganatoInfo = {
     version: MangaBox_1.getExportVersion('0.0.0'),
     name: 'Manganelo',
