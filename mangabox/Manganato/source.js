@@ -1258,12 +1258,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Manganato = exports.ManganatoInfo = void 0;
 const paperback_extensions_common_1 = require("paperback-extensions-common");
 const MangaBox_1 = require("../MangaBox");
-const MANGANATO_DOMAIN = 'https://manganato.com';
+const MANGANATO_DOMAIN = 'https://manganelo.tv';
 exports.ManganatoInfo = {
     version: MangaBox_1.getExportVersion('0.0.0'),
-    name: 'Manganato',
+    name: 'Manganelo',
     description: 'Extension that pulls manga from manganato.com',
-    author: 'nar1n',
+    author: 'nar1n nope',
     authorWebsite: 'https://github.com/nar1n',
     icon: 'icon.png',
     contentRating: paperback_extensions_common_1.ContentRating.EVERYONE,
