@@ -13,7 +13,7 @@ const MANGANATO_DOMAIN = 'https://manganelo.tv'
 
 export const ManganatoInfo: SourceInfo = {
     version: getExportVersion('0.0.0'),
-    name: 'Manganato',
+    name: 'Manganelo',
     description: 'Extension that pulls manga from manganelo.tv',
     author: 'nar1n',
     authorWebsite: 'https://github.com/vapormusic',
