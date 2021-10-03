@@ -18,7 +18,7 @@ describe('Manganato Tests', () => {
      * Try to choose a manga which is updated frequently, so that the historical checking test can 
      * return proper results, as it is limited to searching 30 days back due to extremely long processing times otherwise.
      */
-    const mangaId = 'https://readmanganato.com/manga-dr980474' // Solo Leveling
+    const mangaId = 'https://ww3.manganelo.tv/manga/manga-cz980134' // Solo Leveling
 
     it('Retrieve Manga Details', async () => {
         const details = await wrapper.getMangaDetails(source, mangaId)
@@ -40,6 +40,7 @@ describe('Manganato Tests', () => {
         expect(data, 'No chapters present for: [' + mangaId + ']').to.not.be.empty
 
         const entry = data[0]
+        console.log(data)
         expect(entry?.id, 'No ID present').to.not.be.empty
         expect(entry?.mangaId, 'MangaId Changed').to.be.eql(mangaId)
         expect(entry?.time, 'No date present').to.exist
@@ -50,7 +51,7 @@ describe('Manganato Tests', () => {
     it('Get Chapter Details', async () => {
 
         const chapters = await wrapper.getChapters(source, mangaId)
-        const data = await wrapper.getChapterDetails(source, mangaId, chapters[0]?.id ?? 'unknown')
+        const data = await wrapper.getChapterDetails(source, mangaId , chapters[0]?.id ?? 'unknown')
 
         expect(data, 'No server response').to.exist
         expect(data, 'Empty server response').to.not.be.empty

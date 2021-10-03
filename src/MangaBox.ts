@@ -23,7 +23,8 @@ import {
     parseChapterDetails,
     parseChapters,
     parseMangaDetails,
-    UpdatedManga
+    UpdatedManga,
+    parseMangaList2
 } from './MangaBoxParser'
 import { URLBuilder } from './MangaBoxHelper'
 import {
@@ -31,7 +32,7 @@ import {
     imageServerSettings
 } from './MangaBoxSettings'
 
-const BASE_VERSION = '3.0.5'
+const BASE_VERSION = '3.0.8'
 export const getExportVersion = (EXTENSION_VERSION: string): string => {
     return BASE_VERSION.split('.').map((x, index) => Number(x) + Number(EXTENSION_VERSION.split('.')[index])).join('.')
 }
@@ -86,13 +87,13 @@ export abstract class MangaBox extends Source {
      * Path for manga list.
      * Eg. for https://manganato.com/genre-all the path is 'genre-all'
      */
-    mangaListPath = 'genre-all'
+    mangaListPath = 'genre'
 
     /**
      * Selector for manga in manga list
      */
-    mangaListSelector = 'div.panel-content-genres div.content-genres-item'
-
+    mangaListSelector = 'div.panel-search-story div.search-story-item'
+    mangaListSelector2 = 'div.panel-content-genres div.content-genres-item'
     /**
      * Selector for subtitle in manga list
      */
@@ -232,7 +233,7 @@ export abstract class MangaBox extends Source {
 
             promises.push(this.requestManager.schedule(section.request, 1).then(async response => {
                 const $ = this.cheerio.load(response.data)
-                section.section.items = parseMangaList($, this)
+                section.section.items = parseMangaList2($, this)
                 sectionCallback(section.section)
             }))
         }
@@ -266,18 +267,23 @@ export abstract class MangaBox extends Source {
 
     async getSearchResults(query: SearchRequest, metadata: any): Promise<PagedResults> {
         const page: number = metadata?.page ?? 1
+        // https://ww3.manganelo.tv/search/hello?page=2
+        const u = new URLBuilder(this.baseUrl+'/search/')
+        .addPathComponent(query.title?.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ +/g, '%20').toLowerCase() ?? '')
+        .addQueryParameter('page', page)
+        .buildUrl().toString()
+        console.log(u)
         const request = createRequestObject({
-            url: new URLBuilder(this.baseUrl)
-                .addPathComponent('advanced_search')
-                .addQueryParameter('keyw', query.title?.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ +/g, '_').toLowerCase())
-                .addQueryParameter('g_i', `_${query.includedTags?.map(x => x.id).join('_')}_`)
-                .addQueryParameter('page', page)
-                .buildUrl(),
+            url: new URLBuilder(this.baseUrl+'/search/')
+            .addPathComponent(query.title?.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ +/g, '%20').toLowerCase() ?? '')
+            .addQueryParameter('page', page)
+            .buildUrl(),
             method: 'GET'
         })
 
         const response = await this.requestManager.schedule(request, 1)
         const $ = this.cheerio.load(response.data)
+       // console.log($.html())
         const manga = parseMangaList($, this)
         metadata = !isLastPage($) ? { page: page + 1 } : undefined
 

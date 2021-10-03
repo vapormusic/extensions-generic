@@ -15,7 +15,7 @@ export const ManganatoInfo: SourceInfo = {
     version: getExportVersion('0.0.0'),
     name: 'Manganelo',
     description: 'Extension that pulls manga from manganelo.tv',
-    author: 'nar1n',
+    author: 'helobitch',
     authorWebsite: 'https://github.com/vapormusic',
     icon: 'icon.png',
     contentRating: ContentRating.EVERYONE,

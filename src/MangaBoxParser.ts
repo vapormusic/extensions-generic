@@ -14,6 +14,7 @@ import {
 
 import entities = require('entities')
 
+
 export interface UpdatedManga {
     ids: string[],
     loadMore: boolean;
@@ -62,7 +63,7 @@ export const parseMangaDetails = ($: CheerioStatic, mangaId: string, source: any
     return createManga({
         id: mangaId,
         titles: titles,
-        image: image,
+        image: "https://ww3.manganelo.tv" + image,
         rating: 0,
         status: status,
         author: author,
@@ -84,8 +85,8 @@ export const parseChapters = ($: CheerioStatic, mangaId: string, source: any): C
         if (chapRegex && chapRegex[1]) chapterNumber = Number(chapRegex[1].replace(/\\/g, '.'))
         if (!id) continue
         chapters.push(createChapter({
-            id: id,
-            mangaId,
+            id: (id.startsWith("https://ww3.manganelo.tv") ? '' : "https://ww3.manganelo.tv") + id,
+            mangaId:  mangaId,
             name: title,
             langCode: LanguageCode.ENGLISH,
             chapNum: chapterNumber,
@@ -102,10 +103,11 @@ export const parseChapterDetails = ($: CheerioStatic, mangaId: string, chapterId
         let image = $(p).attr('src') ?? ''
         if (!image) image = $(p).attr('data-src') ?? ''
         if (!image) throw new Error(`Unable to parse image(s) for chapterID: ${chapterId}`)
+        console.log(image)
         pages.push(image)
     }
     const chapterDetails = createChapterDetails({
-        id: chapterId,
+        id: (chapterId.startsWith("https://ww3.manganelo.tv") ? '' : "https://ww3.manganelo.tv") + chapterId,
         mangaId: mangaId,
         pages: pages,
         longStrip: false
@@ -144,8 +146,25 @@ export const parseMangaList = ($: CheerioStatic, source: any): MangaTile[] => {
         const subtitle = $(source.mangaListSubtitleSelector, manga).last().text().trim()
         if (!id || !title) continue
         results.push(createMangaTile({
-            id: id,
-            image: image,
+            id:	"https://ww3.manganelo.tv" + id,
+            image: "https://ww3.manganelo.tv" +  image,
+            title: createIconText({ text: decodeHTMLEntity(title) }),
+            subtitleText: createIconText({ text: subtitle }),
+        }))
+    }
+    return results
+}
+export const parseMangaList2 = ($: CheerioStatic, source: any): MangaTile[] => {
+    const results: MangaTile[] = []
+    for (const manga of $(source.mangaListSelector2).toArray()) {
+        const title = $('a', manga).first().attr('title')
+        const id = $('a', manga).first().attr('href')
+        const image = $('img', manga).first().attr('src') ?? 'https://i.imgur.com/GYUxEX8.png'
+        const subtitle = $(source.mangaListSubtitleSelector, manga).last().text().trim()
+        if (!id || !title) continue
+        results.push(createMangaTile({
+            id:	"https://ww3.manganelo.tv" + id,
+            image: "https://ww3.manganelo.tv" +  image,
             title: createIconText({ text: decodeHTMLEntity(title) }),
             subtitleText: createIconText({ text: subtitle }),
         }))
