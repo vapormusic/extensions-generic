@@ -9,14 +9,14 @@ import {
     getExportVersion
 } from '../MangaBox'
 
-const MANGANATO_DOMAIN = 'https://manganato.com'
+const MANGANATO_DOMAIN = 'https://manganelo.tv'
 
 export const ManganatoInfo: SourceInfo = {
     version: getExportVersion('0.0.0'),
     name: 'Manganato',
-    description: 'Extension that pulls manga from manganato.com',
+    description: 'Extension that pulls manga from manganelo.tv',
     author: 'nar1n',
-    authorWebsite: 'https://github.com/nar1n',
+    authorWebsite: 'https://github.com/vapormusic',
     icon: 'icon.png',
     contentRating: ContentRating.EVERYONE,
     websiteBaseURL: MANGANATO_DOMAIN,
